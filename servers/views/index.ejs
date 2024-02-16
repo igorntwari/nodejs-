@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+ <%-include('./partials/head.ejs') %>
+  <body>
+    <span>this is a ejs file</span>
+    <p>this page has all the neccesary</p>
+
+    <%-include('./partials/nav.ejs') %>
+    <p>
+      this is about home page the main page that will be having all the blogs
+    </p>
+    <div>
+      <h1>list of all blogs</h1>
+      <% if (blogs.length > 0) { %> <% blogs.forEach((blog)=> { %>
+      <h1><%=blog.tittle%></h1>
+      <h3><%=blog.snippet%></h3>
+      <% }) %> <% } else { %>
+      <p>no blogs available</p>
+      <% } %>
+    </div>
+    <%-include('./partials/footer.ejs')  %>
+  </body>
+</html>
