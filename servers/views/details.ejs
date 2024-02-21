@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('./partials/head.ejs') %>
+  <body>
+    <span>this is a ejs file</span>
+    <p>this page has all the neccesary</p>
+    <%-include('./partials/nav.ejs') %>
+    <p>will use this page to create a new blog</p>
+
+    <div>
+      <h1>blog details</h1>
+      <h1><%= blog.tittle %></h1>
+      <h3><%= blog.body %></h3>
+      <a class="delete" data-doc="<%=blog._id %>">delete button</a>
+    </div>
+    <%-include('./partials/footer.ejs') %>
+    <script>
+      const trashcan = document.querySelector("a.delete");
+
+      trashcan.addEventListener("click", (e) => {
+        const endPoint = `/blogs/${trashcan.dataset.doc}`;
+        fetch(endPoint, {
+          method: "DELETE",
+        })
+          .then((response)=> response.json())
+          .then((data) =>window.location.href = data.redirect)
+          .catch((err) => console.log(err));
+      });
+    </script>
+  </body>
+</html>

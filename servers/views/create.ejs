@@ -6,6 +6,16 @@
     <p>this page has all the neccesary</p>
     <%-include('./partials/nav.ejs') %>
     <p>will use this page to create a new blog</p>
-    <%-include('./partials/footer.ejs')  %>
+    <%-include('./partials/footer.ejs') %>
+
+    <form action="/blogs" method="POST">
+      <label for="">tittle</label>
+      <input type="text" id="tittle" name="tittle" />
+      <label for="">snippet</label>
+      <input type="text" id="snippet" name="snippet" />
+      <label for="">full blog</label>
+      <textarea type="text" id="blog" required name="body"></textarea>
+      <button>submit</button>
+    </form>
   </body>
 </html>
