@@ -17,9 +17,9 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
-
 app.get("/add-blog", (req, res) => {
   const blog = new Blog({
+
     tittle: "first second in db",
     snippet: "watch what happened on the gym tv",
     body: "this is a blog about the gym tv and what happened to they gym tv ",
