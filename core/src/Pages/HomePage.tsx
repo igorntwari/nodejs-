@@ -14,28 +14,48 @@ const WS_URL = "ws://127.0.0.1:9000";
 // }
 
 function HomePage() {
+  const [textAreaContent, setTextAreaContent] = useState("");
+
   const [joinBoard, setJoinBoard] = useState("");
   const [names, setNames] = useState<string[]>([]);
   const [username,] = useState(""); // Define username state here
 
-  const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(WS_URL, {
     onOpen: () => {
       console.log("WebSocket connection established.");
+    },
+    onMessage: (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === "contentchange") {
+        setTextAreaContent(message.content);
+      }
     },
     share: true,
     filter: () => false,
     retryOnError: true,
     shouldReconnect: () => true,
   });
+  
 
   useEffect(() => {
-    if (username && readyState === ReadyState.OPEN) {
+    if (lastMessage?.data) {
+      const message = JSON.parse(lastMessage.data);
+      if (message.type === "contentchange") {
+        setTextAreaContent(message.content);
+      }
+    }
+  }, [lastMessage]);
+  
+  useEffect(() => {
+    if (readyState === ReadyState.OPEN) {
       sendJsonMessage({
         username,
-        type: "userevent",
+        type: "contentchange",
+        content: textAreaContent,
       });
     }
-  }, [username, sendJsonMessage, readyState]);
+  }, [username, sendJsonMessage, readyState, textAreaContent]);
+  
 
   const handleBoard = (name) => {
     console.log(name);
@@ -70,12 +90,15 @@ function HomePage() {
       <div className="border-black border-2 w-1/2 h-96 flex flex-col gap-4 px-4 m-10 justify-center items-center">
         <h1>Enter your Message</h1>
         <textarea
-          className="border-2 border-black w-96"
-          name="code"
-          id=""
-          cols={20}
-          rows={10}
-        ></textarea>
+  className="border-2 border-black w-96"
+  name="code"
+  id=""
+  cols={20}
+  rows={10}
+  value={textAreaContent}
+  onChange={(e) => setTextAreaContent(e.target.value)}
+></textarea>
+
         <button className="bg-blue-700 p-y-2 px-4 rounded-sm border-2 border-black w-36 justify-center items-center">
           Run Code
         </button>
