@@ -1,8 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
+const WS_URL = "ws://127.0.0.1:9000";
+
+// function isUserEvent(Message) {
+//   const parsedMessage = JSON.parse(Message.data);
+//   return parsedMessage.type === "userevent";
+// }
+
+// function isDocumentEvent(message) {
+//   const parsedMessage = JSON.parse(message.data);
+//   return parsedMessage.type === "contentchange";
+// }
 
 function HomePage() {
   const [joinBoard, setJoinBoard] = useState("");
-  const [names, setNames] = useState([]);
+  const [names, setNames] = useState<string[]>([]);
+  const [username,] = useState(""); // Define username state here
+
+  const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+    onOpen: () => {
+      console.log("WebSocket connection established.");
+    },
+    share: true,
+    filter: () => false,
+    retryOnError: true,
+    shouldReconnect: () => true,
+  });
+
+  useEffect(() => {
+    if (username && readyState === ReadyState.OPEN) {
+      sendJsonMessage({
+        username,
+        type: "userevent",
+      });
+    }
+  }, [username, sendJsonMessage, readyState]);
 
   const handleBoard = (name) => {
     console.log(name);
