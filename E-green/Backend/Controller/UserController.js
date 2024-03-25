@@ -24,25 +24,10 @@ const Get_Single_User = (req, res) => {
     });
 };
 
-const Create_Single_User = (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  })
-    .save()
-    .then((result) => {
-      res.status(201).send(result);
-      console.log("new user was created in db");
-    })
-    .catch((error) => {
-      res.status(501).send(error);
-    });
-};
+
 
 
 module.exports = {
   All_User,
-  Create_Single_User,
   Get_Single_User,
 };

@@ -3,10 +3,14 @@ const bodyParser = require("body-parser");
 const app = express();
 const UserRoutes = require("./Routes/user.routes");
 const ProductRoutes = require("./Routes/product.routes");
+const AuthRoutes = require('./Auth/AuthRoutes')
 
 app.use(bodyParser.json());
 const connectDB = require("./db/connectDB");
 app.use(express.urlencoded({ extended: true }));
+
+//Authantication
+app.use('/auth',AuthRoutes)
 
 //users
 app.use(UserRoutes);
