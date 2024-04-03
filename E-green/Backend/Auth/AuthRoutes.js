@@ -25,14 +25,15 @@ router.post("/signup", async (req, res) => {
       username,
       password: hashedPassword,
       email,
-      role: 'User'
+      role: "User",
     });
     console.log("new user signed up");
     return res.status(201).json({
       _id: LoggedInUser.id,
       name: LoggedInUser.name,
       email: LoggedInUser.email,
-      token: generateToken(LoggedInUser._id,LoggedInUser.role),
+      token: generateToken(LoggedInUser._id, LoggedInUser.role),
+      role: LoggedInUser.role,
     });
   } catch (error) {
     console.error(error);
@@ -44,10 +45,10 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  
+
   if (!username || !password) {
     res.status(400);
-    
+
     throw new Error("Please add all fields");
   }
 
